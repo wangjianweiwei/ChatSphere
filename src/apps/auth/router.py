@@ -4,19 +4,33 @@
 @date：2023/12/26 21:24
 """
 from fastapi import APIRouter
-from src.apps.auth.service import AuthService
+
+from src.response import Response
+from src.apps.auth.models import User
+from src.exceptions import GenericException
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-@router.get("/login")
-async def login():
-    auth = AuthService()
+@router.post("/login")
+async def login(username: str, password: str):
+    user = await User.filter(username=username).first()
+    if not user:
+        raise GenericException(msg="用户不存在")
 
-    username = "admin"
-    if not auth.check_username(username):
-        return {"message": "用户名不存在"}
+    if not user.check_password(password):
+        raise GenericException(msg="密码错误")
 
+    return Response(msg="登录成功")
+
+
+@router.post("/register")
+async def register(username: str, password: str):
+    user = User(username=username)
+    user.make_password(password)
+    await user.save()
+
+    return Response(msg="注册成功")
 
 
 @router.get("/hello/{name}")
