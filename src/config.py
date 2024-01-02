@@ -3,6 +3,7 @@
 @Author：wang jian wei
 @date：2023/12/26 21:21
 """
+TIMEZONE = "Asia/Shanghai"
 
 DATABASE = {
     'connections': {
@@ -23,5 +24,5 @@ DATABASE = {
             'default_connection': 'default',
         }
     },
-    "timezone": "Asia/Shanghai"
+    "timezone": TIMEZONE
 }
