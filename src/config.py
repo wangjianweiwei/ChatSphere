@@ -26,3 +26,10 @@ DATABASE = {
     },
     "timezone": TIMEZONE
 }
+
+CACHE = {
+    "host": "localhost",
+    "port": 9736,
+    "password": "",
+    "db": 0
+}

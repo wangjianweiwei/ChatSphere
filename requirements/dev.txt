@@ -3,3 +3,4 @@ uvicorn==0.25.0
 tortoise-orm[asyncmy]==0.20.0
 aerich==0.7.2
 ujson==5.9.0
+redis==5.1.0b1

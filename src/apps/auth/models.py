@@ -23,8 +23,11 @@ class User(models.Model):
         obj.update(password.encode())
         self.password = obj.hexdigest()
 
-    def check_password(self, password: str) -> bool:
+    def verify_password(self, password: str) -> bool:
         obj = md5(self.password_hash.encode())
         obj.update(password.encode())
 
         return obj.hexdigest() == self.password
+
+    def login(self):
+        pass
