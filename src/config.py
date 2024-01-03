@@ -31,5 +31,6 @@ CACHE = {
     "host": "localhost",
     "port": 9736,
     "password": "",
-    "db": 0
+    "db": 0,
+    "decode_responses": True
 }

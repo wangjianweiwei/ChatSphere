@@ -24,7 +24,7 @@ def register_routers(app: FastAPI) -> None:
 async def extend(app: FastAPI) -> None:
     global cache
 
-    cache = Redis(**CACHE, decode_responses=True)
+    cache = Redis(**CACHE)
     await Tortoise.init(config=DATABASE)
     register_routers(app)
 
