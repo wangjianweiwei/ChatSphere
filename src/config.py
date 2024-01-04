@@ -34,3 +34,7 @@ CACHE = {
     "db": 0,
     "decode_responses": True
 }
+
+APPS = [
+    "src.apps.auth"
+]
