@@ -36,5 +36,6 @@ CACHE = {
 }
 
 APPS = [
-    "src.apps.auth"
+    "src.apps.auth",
+    "src.apps.chat",
 ]

@@ -4,9 +4,12 @@
 @date：2023/12/26 21:25
 """
 import secrets
+import uuid
 from hashlib import md5
 
 from tortoise import models, fields
+
+from src.ext import cache
 
 
 class User(models.Model):
@@ -29,5 +32,12 @@ class User(models.Model):
 
         return obj.hexdigest() == self.password
 
-    def login(self):
-        pass
+    async def login(self, expire: int) -> str:
+        token = uuid.uuid4().hex
+        await cache.set(token, value=self.username, ex=expire)
+
+        return token
+
+    @classmethod
+    async def logout(cls, token) -> None:
+        await cache.delete(token)

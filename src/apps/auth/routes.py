@@ -3,15 +3,11 @@
 @Author：wang jian wei
 @date：2023/12/26 21:24
 """
-import uuid
-
 from fastapi import APIRouter
 
-from src.ext import cache
 from src.apps.auth import models
 from src.apps.auth import schemas
-from src.response import Response
-from src.exceptions import GenericException
+from src.http import Response, Codes, GenericException
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -20,13 +16,13 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 async def login(schema: schemas.LoginSchema):
     user = await models.User.filter(username=schema.username).first()
     if not user:
-        raise GenericException(msg="用户不存在")
+        raise GenericException(Codes.account_invalid)
 
     if not user.verify_password(schema.password):
-        raise GenericException(msg="密码错误")
+        raise GenericException(Codes.password_error)
 
-    token = uuid.uuid4().hex
-    await cache.set(token, value=user.username)
+    token = await user.login(expire=120)
+
     return Response(data={"token": token}, msg="登录成功")
 
 
@@ -37,6 +33,13 @@ async def register(schema: schemas.RegisterSchema):
     await user.save()
 
     return Response(msg="注册成功")
+
+
+@router.delete("/logout")
+async def logout():
+    await models.User.logout("")
+
+    return Response(msg="退出登录成功")
 
 
 @router.get("/hello/{name}")

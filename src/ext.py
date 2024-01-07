@@ -19,20 +19,31 @@ cache: Union[Redis, None] = None
 def register_routers(app: FastAPI) -> None:
     for path in APPS:
         module = importlib.import_module(path)
-        router = getattr(module, "router", None)
-        if router:
+        if router := getattr(module, "router", None):
             app.include_router(router)
+        if asgi_app := getattr(module, "asgi_app", None):
+            app.mount("", asgi_app)
+
+
+async def startup(app) -> None:
+    global cache
+    # 初始化Redis
+    cache = Redis(**CACHE)
+    # 初始化MySQL
+    await Tortoise.init(config=DATABASE)
+    # 注册路由
+    register_routers(app)
+
+
+async def shutdown(app) -> None:
+    await connections.close_all()
+    await cache.aclose()
 
 
 @asynccontextmanager
 async def extend(app: FastAPI) -> None:
-    global cache
-
-    cache = Redis(**CACHE)
-    await Tortoise.init(config=DATABASE)
-    register_routers(app)
+    await startup(app)
 
     yield
 
-    await connections.close_all()
-    await cache.aclose()
+    await shutdown(app)

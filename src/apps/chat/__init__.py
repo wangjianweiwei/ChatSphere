@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 @Author：wang jian wei
-@date：2024/1/2 22:46
+@date：2024/1/7 22:11
 """
-SUCCESS = 2000
+from .routes import asgi_app
