@@ -7,7 +7,7 @@ from src.http import Codes
 
 
 class GenericException(Exception):
-    default = Codes.GENERIC_ERROR
+    default = Codes.error
 
     def __init__(self, code: Codes = None, data=None):
         code = code or self.default

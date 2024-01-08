@@ -3,8 +3,8 @@
 @Author：wang jian wei
 @date：2023/12/26 21:25
 """
-import secrets
 import uuid
+import secrets
 from hashlib import md5
 
 from tortoise import models, fields

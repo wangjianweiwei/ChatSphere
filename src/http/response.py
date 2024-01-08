@@ -5,11 +5,11 @@
 """
 from fastapi.responses import UJSONResponse
 
-from src.codes import SUCCESS
+from src.http import Codes
 
 
 class Response(UJSONResponse):
 
-    def __init__(self, data: dict = None, code: int = SUCCESS, msg: str = 'OK', **kwargs):
-        content = {"code": code, "data": data, "msg": msg}
+    def __init__(self, data: dict = None, code: Codes = Codes.success, msg: str = None, **kwargs):
+        content = {"code": code.value.code, "data": data, "msg": msg if msg else code.value.msg}
         super().__init__(content, 200, **kwargs)
