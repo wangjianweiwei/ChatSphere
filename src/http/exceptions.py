@@ -9,8 +9,8 @@ from src.http import Codes
 class GenericException(Exception):
     default = Codes.error
 
-    def __init__(self, code: Codes = None, data=None):
+    def __init__(self, code: Codes = None, data=None, msg: str = None):
         code = code or self.default
-        self.code = code.value.code
+        self.code = code
         self.data = data
-        self.msg = code.value.msg
+        self.msg = msg

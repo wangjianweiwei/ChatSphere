@@ -3,7 +3,7 @@
 @Author：wang jian wei
 @date：2023/12/26 21:24
 """
-from fastapi import APIRouter
+from fastapi import APIRouter, Header
 
 from src.apps.auth import models
 from src.apps.auth import schemas
@@ -35,9 +35,9 @@ async def register(schema: schemas.RegisterSchema):
     return Response(msg="注册成功")
 
 
-@router.delete("/logout")
-async def logout():
-    await models.User.logout("")
+@router.get("/logout")
+async def logout(token: str = Header(None)):
+    await models.User.logout(token)
 
     return Response(msg="退出登录成功")
 
